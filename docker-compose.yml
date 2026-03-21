@@ -12,5 +12,34 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+# For caching
+  redis:
+    image: redis:7-alpine
+    container_name: findmeadoc_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    restart: unless-stopped
+
+# 3. Spring Boot Application
+  backend-app:
+    build: . # Tells Docker to build the Dockerfile located in this same folder
+    container_name: findmeadoc_backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      # These environment variables override the defaults in your application.yml
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/findmeadoc
+      - SPRING_DATASOURCE_USERNAME=findmeadoc_user
+      - SPRING_DATASOURCE_PASSWORD=iit@9009
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_DATA_REDIS_PORT=6379
+    restart: unless-stopped
+
 volumes:
   pgdata:
+  redisdata:

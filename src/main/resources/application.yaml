@@ -4,9 +4,9 @@ spring:
     name: find_me_a_doc_backend
 
   datasource:
-    url: jdbc:postgresql://localhost:5433/findmeadoc
-    username: findmeadoc_user
-    password: iit@9009
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5433/findmeadoc}
+    username: ${SPRING_DATASOURCE_USERNAME:findmeadoc_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:iit@9009}
     driver-class-name: org.postgresql.Driver
 
   flyway:
@@ -16,7 +16,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: none
     show-sql: true
     properties:
       hibernate:
