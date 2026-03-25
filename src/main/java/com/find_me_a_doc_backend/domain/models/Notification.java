@@ -1,4 +1,4 @@
-package com.example.find_me_a_doc_backend.domain;
+package com.find_me_a_doc_backend.domain.models;
 
 import jakarta.persistence.*;
 import lombok.Data;

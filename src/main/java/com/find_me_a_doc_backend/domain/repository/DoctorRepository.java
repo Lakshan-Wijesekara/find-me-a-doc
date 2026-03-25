@@ -1,6 +1,6 @@
-package com.example.find_me_a_doc_backend.domain.repository;
+package com.find_me_a_doc_backend.domain.repository;
 
-import com.example.find_me_a_doc_backend.domain.Doctor;
+import com.find_me_a_doc_backend.domain.models.Doctor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
