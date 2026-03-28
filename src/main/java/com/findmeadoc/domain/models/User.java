@@ -1,4 +1,4 @@
-package com.example.find_me_a_doc_backend.domain;
+package com.findmeadoc.domain.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -20,8 +20,9 @@ public class User {
     @Column(name = "password_hash", nullable = false)
     private String password;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String role;
+    private Role role;
 
     @Column(name = "full_name", nullable = false)
     private String fullName;
