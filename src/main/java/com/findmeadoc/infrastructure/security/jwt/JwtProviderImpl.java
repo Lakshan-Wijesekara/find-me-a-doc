@@ -1,7 +1,7 @@
-package com.find_me_a_doc_backend.infrastructure.security.jwt;
+package com.findmeadoc.infrastructure.security.jwt;
 
-import com.find_me_a_doc_backend.application.ports.TokenProvider;
-import com.find_me_a_doc_backend.domain.models.User;
+import com.findmeadoc.application.ports.TokenProvider;
+import com.findmeadoc.domain.models.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -15,8 +15,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+// Implement JWT logic
 @Component
 public class JwtProviderImpl implements TokenProvider {
+
     // This class acts as a digital ID
     @Value("${application.security.jwt.secret-key}")
     private String SECRET_KEY;
@@ -33,7 +35,7 @@ public class JwtProviderImpl implements TokenProvider {
         return Jwts.builder()
                 .claims(extraClaims)
                 .subject(user.getEmail()) // Assuming email is the unique identifier
-                .claim("role", user.getRole()) // Inject role into token
+                .claim("role", user.getRole().name())// Inject role into token
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + JWT_EXPIRATION))
                 .signWith(getSignInKey(), Jwts.SIG.HS256)

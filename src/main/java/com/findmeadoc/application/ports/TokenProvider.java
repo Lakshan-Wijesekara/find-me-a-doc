@@ -1,5 +1,5 @@
-package com.find_me_a_doc_backend.application.ports;
-import com.find_me_a_doc_backend.domain.models.User;
+package com.findmeadoc.application.ports;
+import com.findmeadoc.domain.models.User;
 
 // Using the interface for token provider and JWT related operations will be separated for separation of concerns.
 public interface TokenProvider {

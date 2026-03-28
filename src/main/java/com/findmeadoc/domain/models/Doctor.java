@@ -1,4 +1,4 @@
-package com.find_me_a_doc_backend.domain.models;
+package com.findmeadoc.domain.models;
 
 import jakarta.persistence.*;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.find_me_a_doc_backend;
+package com.findmeadoc;
 
 import org.flywaydb.core.Flyway;
 import org.springframework.boot.SpringApplication;
