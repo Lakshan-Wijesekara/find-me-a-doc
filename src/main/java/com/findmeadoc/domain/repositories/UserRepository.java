@@ -1,4 +1,4 @@
-package com.findmeadoc.domain.repository;
+package com.findmeadoc.domain.repositories;
 
 import com.findmeadoc.domain.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;

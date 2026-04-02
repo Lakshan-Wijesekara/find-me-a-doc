@@ -1,13 +1,16 @@
-package com.findmeadoc.domain.repository;
+package com.findmeadoc.domain.repositories;
 
 import com.findmeadoc.domain.models.Doctor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
+
 
 // To deal with the db
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     List<Doctor> findBySpecialization(String specialty);
+    Optional<Doctor> findByUserEmail(String email);
 }

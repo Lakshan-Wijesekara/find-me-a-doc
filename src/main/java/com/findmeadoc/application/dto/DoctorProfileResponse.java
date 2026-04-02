@@ -1,14 +1,11 @@
 package com.findmeadoc.application.dto;
 
-import java.math.BigDecimal;
-
-public record DoctorRegistrationRequest(
-        String email,
-        String password,
+public record DoctorProfileResponse(
+        Long id,
         String name,
         String specialization,
         Double consultationFee,
+        String email,
         String phoneNumber
 ) {
-
 }
