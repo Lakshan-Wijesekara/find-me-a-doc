@@ -28,8 +28,6 @@ public class SearchDoctorService implements SearchDoctorUseCase {
             doctors = doctorRepository.findBySpecialization(specialty);
         }
 
-        // Step 2: Convert the List<Doctor> into List<DoctorProfileResponse>
-
         return doctors.stream()
                 .map(doctor -> new DoctorProfileResponse(
                         doctor.getId(),
