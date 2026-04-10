@@ -1,7 +1,7 @@
 package com.findmeadoc.infrastructure.security.services;
 
 import com.findmeadoc.domain.models.User;
-import com.findmeadoc.domain.repository.UserRepository;
+import com.findmeadoc.domain.repositories.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
