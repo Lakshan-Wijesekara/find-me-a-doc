@@ -16,6 +16,8 @@ import com.findmeadoc.domain.models.Doctor;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -29,8 +31,20 @@ public class AppointmentBookingService implements BookAppointmentUseCase {
     @Transactional
     public CreateAppointmentResponse execute(CreateAppointmentRequest request, String patientEmail) {
         // Get the doctor details
-        Doctor doctor = doctorRepository.findById(request.doctorId())
+        Doctor doctor = doctorRepository.findByIdWithLock(request.doctorId()) // Updated with pessimistic booking
                 .orElseThrow(() -> new ResourceNotFoundException("Doctor not found with id: " + request.doctorId()));
+
+        // Fetch the map of current bookings for that day
+        Map<LocalTime, Integer> dailyBookings = appointmentRepository
+                .findBookedSlotCountByDoctorAndDate(request.doctorId(), request.appointmentDate());
+
+        // Get the specific count for the requested time (default to 0 if empty)
+        int currentBookings = dailyBookings.getOrDefault(request.appointmentTime(), 0);
+
+        // Check if it hit the limit
+        if (currentBookings >= 10) {
+            throw new IllegalStateException("This time slot is fully booked.");
+        }
 
         // Get the patient details
         User patient = userRepository.findByEmail(patientEmail)
