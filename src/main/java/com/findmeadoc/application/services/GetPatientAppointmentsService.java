@@ -3,10 +3,9 @@ package com.findmeadoc.application.services;
 import com.findmeadoc.application.dto.AppointmentDashboardResponse;
 import com.findmeadoc.application.ports.GetPatientAppointmentUseCase;
 import com.findmeadoc.domain.repositories.AppointmentRepository;
-import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +21,7 @@ public class GetPatientAppointmentsService implements GetPatientAppointmentUseCa
     public List<AppointmentDashboardResponse> execute(String patientEmail) {
 
         // Fetch from the database and start the stream
-        return appointmentRepository.findByPatientEmail(patientEmail)
+        return appointmentRepository.findByPatientUserEmail(patientEmail)
                 .stream()
                 .map(appointment -> {
 

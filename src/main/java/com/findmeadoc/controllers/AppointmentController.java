@@ -1,14 +1,20 @@
 package com.findmeadoc.controllers;
 
-import com.findmeadoc.application.dto.*;
+import com.findmeadoc.application.dto.AppointmentDashboardResponse;
+import com.findmeadoc.application.dto.AvailableSlotResponse;
+import com.findmeadoc.application.dto.CreateAppointmentRequest;
+import com.findmeadoc.application.dto.CreateAppointmentResponse;
 import com.findmeadoc.application.ports.BookAppointmentUseCase;
+import com.findmeadoc.application.ports.GetAvailableSlotsUseCase;
 import com.findmeadoc.application.ports.GetPatientAppointmentUseCase;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -17,10 +23,16 @@ import java.util.List;
 public class AppointmentController {
     private final BookAppointmentUseCase bookAppointmentUseCase;
     private final GetPatientAppointmentUseCase getPatientAppointmentUseCase;
+    private final GetAvailableSlotsUseCase getAvailableSlotsUseCase;
 
-    public  AppointmentController(BookAppointmentUseCase bookAppointmentUseCase, GetPatientAppointmentUseCase getPatientAppointmentUseCase) {
+    public AppointmentController(
+            BookAppointmentUseCase bookAppointmentUseCase,
+            GetPatientAppointmentUseCase getPatientAppointmentUseCase,
+            GetAvailableSlotsUseCase getAvailableSlotsUseCase
+    ) {
         this.bookAppointmentUseCase = bookAppointmentUseCase;
         this.getPatientAppointmentUseCase = getPatientAppointmentUseCase;
+        this.getAvailableSlotsUseCase = getAvailableSlotsUseCase;
     }
 
     @PostMapping
@@ -47,6 +59,18 @@ public class AppointmentController {
         List<AppointmentDashboardResponse> appointments = getPatientAppointmentUseCase.execute(patientEmail);
 
         return ResponseEntity.ok(appointments);
+    }
+
+    @GetMapping("/available-slots")
+    public ResponseEntity<List<AvailableSlotResponse>> getAvailableSlots(
+            @RequestParam Long doctorId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+
+        // Pass the request to the service layer
+        List<AvailableSlotResponse> availableSlots = getAvailableSlotsUseCase.execute(doctorId, date);
+
+        // Return 200 OK with the list of available times
+        return ResponseEntity.ok(availableSlots);
     }
 
 }
