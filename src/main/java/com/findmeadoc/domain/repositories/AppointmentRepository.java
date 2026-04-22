@@ -20,9 +20,9 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
     List<Appointment> findByPatient(User patient);
 
-    List<Appointment> findByPatientEmail(String email);
+    List<Appointment> findByPatientUserEmail(String email);
 
-    // DB query to group and count the bookings by time
+    // DB query to group and count the bookings by time, efficient than getting alll the appointments and looping
     @Query("SELECT a.appointmentTime AS startTime, COUNT(a) AS bookingCount " +
             "FROM Appointment a " +
             "WHERE a.doctor.id = :doctorId AND a.appointmentDate = :date " +
