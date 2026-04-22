@@ -1,4 +1,4 @@
--- Users Table: Handles Auth and Profiles for Admin, Doctor, and Patient
+-- 1. Users Table: Handles Auth and Profiles for Admin, Doctor, and Patient
 CREATE TABLE users (
                        id BIGSERIAL PRIMARY KEY,
                        email VARCHAR(255) UNIQUE NOT NULL,
@@ -9,7 +9,14 @@ CREATE TABLE users (
                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Doctors Table: Marketplace details (Linked to Users)
+-- 2. Patients Table: Patient-specific details (Linked to Users)
+CREATE TABLE patients (
+                          id BIGSERIAL PRIMARY KEY,
+                          user_id BIGINT REFERENCES users(id) ON DELETE CASCADE,
+                          age INT NOT NULL
+);
+
+-- 3. Doctors Table: Marketplace details (Linked to Users)
 CREATE TABLE doctors (
                          id BIGSERIAL PRIMARY KEY,
                          user_id BIGINT REFERENCES users(id) ON DELETE CASCADE,
@@ -18,11 +25,11 @@ CREATE TABLE doctors (
                          is_verified BOOLEAN DEFAULT FALSE
 );
 
--- Appointments Table: The Core Transaction
+-- 4. Appointments Table: The Core Transaction
 CREATE TABLE appointments (
                               id BIGSERIAL PRIMARY KEY,
-                              patient_id BIGINT REFERENCES users(id),
-                              doctor_id BIGINT REFERENCES doctors(id),
+                              patient_id BIGINT REFERENCES patients(id) ON DELETE CASCADE, -- UPDATED: Now references patients table!
+                              doctor_id BIGINT REFERENCES doctors(id) ON DELETE CASCADE,
                               appointment_date DATE NOT NULL,
                               start_time TIME NOT NULL,
                               status VARCHAR(50) NOT NULL,
@@ -31,7 +38,7 @@ CREATE TABLE appointments (
                               created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Notifications Table: Admin messages and Cancellation alerts
+-- 5. Notifications Table: Admin messages and Cancellation alerts
 CREATE TABLE notifications (
                                id BIGSERIAL PRIMARY KEY,
                                user_id BIGINT REFERENCES users(id) ON DELETE CASCADE,
@@ -40,7 +47,7 @@ CREATE TABLE notifications (
                                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- The Partial Unique Index to prevent double bookings
+-- 6. The Partial Unique Index to prevent double bookings
 CREATE UNIQUE INDEX unique_active_booking
     ON appointments (doctor_id, appointment_date, start_time)
     WHERE status = 'BOOKED';

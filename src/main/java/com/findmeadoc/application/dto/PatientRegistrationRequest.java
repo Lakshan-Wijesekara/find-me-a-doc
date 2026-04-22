@@ -5,7 +5,8 @@ public record PatientRegistrationRequest(
         String name,
         String email,
         String password,
-        String phoneNumber
+        String phoneNumber,
+        Integer age
 ) {
 
 }
