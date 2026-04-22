@@ -1,13 +1,14 @@
 package com.findmeadoc.domain.models;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-import com.fasterxml.jackson.databind.JsonNode;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 
 @Entity
@@ -26,7 +27,7 @@ public class Appointment {
 
     @ManyToOne
     @JoinColumn(name = "patient_id", nullable = false)
-    private User patient;
+    private Patient patient;
 
     @Column(name = "appointment_date", nullable = false)
     private LocalDate appointmentDate;
@@ -40,7 +41,7 @@ public class Appointment {
     @Column(name = "created_at", nullable = false)
     private LocalDate createdAt;
 
-    @Column(name="payment_status", nullable = false)
+    @Column(name = "payment_status", nullable = false)
     private String paymentStatus; // e.g., "Pending", "Paid", "Failed"
 
     @JdbcTypeCode(SqlTypes.JSON)
