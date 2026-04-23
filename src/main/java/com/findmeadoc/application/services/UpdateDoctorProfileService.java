@@ -1,12 +1,12 @@
 package com.findmeadoc.application.services;
 
-import com.findmeadoc.application.ports.UpdateDoctorProfileUseCase;
-import com.findmeadoc.domain.repositories.DoctorRepository;
-
 import com.findmeadoc.application.dto.DoctorProfileResponse;
 import com.findmeadoc.application.dto.DoctorUpdateRequest;
+import com.findmeadoc.application.ports.UpdateDoctorProfileUseCase;
 import com.findmeadoc.domain.models.Doctor;
 import com.findmeadoc.domain.models.User;
+import com.findmeadoc.domain.repositories.DoctorRepository;
+import com.findmeadoc.domain.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,9 +14,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class UpdateDoctorProfileService implements UpdateDoctorProfileUseCase {
 
     private final DoctorRepository doctorRepository;
+    private final UserRepository userRepository;
 
-    public UpdateDoctorProfileService(DoctorRepository doctorRepository) {
+    public UpdateDoctorProfileService(
+            DoctorRepository doctorRepository,
+            UserRepository userRepository
+    ) {
         this.doctorRepository = doctorRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -34,9 +39,11 @@ public class UpdateDoctorProfileService implements UpdateDoctorProfileUseCase {
         // Step 3: Apply the updates to the linked User entity
         User user = doctor.getUser();
         user.setPhoneNumber(request.phoneNumber());
+        user.setFullName(request.name());
 
         // Step 4: Save the changes to the database
         doctorRepository.save(doctor);
+        userRepository.save(user);
 
         // Step 5: Return the freshly updated profile data!
         return new DoctorProfileResponse(
