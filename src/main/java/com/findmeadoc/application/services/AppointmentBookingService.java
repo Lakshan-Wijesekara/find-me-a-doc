@@ -10,7 +10,6 @@ import com.findmeadoc.domain.models.Patient;
 import com.findmeadoc.domain.repositories.AppointmentRepository;
 import com.findmeadoc.domain.repositories.DoctorRepository;
 import com.findmeadoc.domain.repositories.PatientRepository;
-import com.findmeadoc.domain.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +23,6 @@ import java.util.Map;
 public class AppointmentBookingService implements BookAppointmentUseCase {
 
     private final AppointmentRepository appointmentRepository;
-    private final UserRepository userRepository;
     private final PatientRepository patientRepository;
     private final DoctorRepository doctorRepository;
 
