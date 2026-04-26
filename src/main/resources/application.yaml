@@ -25,6 +25,17 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        options:
+          model: llama3:latest
+          num-predict: 2000
+          temperature: 0.2
+          num-thread: 8
+          keep-alive: 10m
+
 application:
   security:
     jwt:

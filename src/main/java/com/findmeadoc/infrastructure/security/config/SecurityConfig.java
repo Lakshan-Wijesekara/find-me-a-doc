@@ -44,6 +44,9 @@ public class SecurityConfig {
                         // Allow PUBLIC access to the doctors list (GET only)
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/doctors/**").permitAll()
 
+                        // Allow public access to the triage service
+                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/triage/**").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
