@@ -58,6 +58,9 @@ public class AppointmentBookingService implements BookAppointmentUseCase {
         newAppointment.setStatus("Scheduled");
         newAppointment.setPaymentStatus("Pending");
         newAppointment.setCreatedAt(LocalDate.now());
+        if (request.aiBrief() != null && !request.aiBrief().isEmpty()) {
+            newAppointment.setAiBrief(request.aiBrief());
+        }
 
         Appointment savedAppointment = appointmentRepository.save(newAppointment);
 

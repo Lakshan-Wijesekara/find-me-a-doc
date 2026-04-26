@@ -14,6 +14,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Map;
+
 import static org.mockito.Mockito.when;
 
 
@@ -46,7 +48,11 @@ class BookingServiceTest {
         mockRequest = new CreateAppointmentRequest(
                 101L,
                 java.time.LocalDate.now().plusDays(1), // Tomorrow's date
-                java.time.LocalTime.of(10, 0) // 10:00 AM
+                java.time.LocalTime.of(10, 0),// 10:00 AM
+                Map.of(
+                        "doctorBrief", "Severe chest pain, possible cardiac issue",
+                        "preSelectedSpecialty", "Cardiology"
+                )
         );
 
         // 1. Build the User and Patient 🧑‍⚕️
