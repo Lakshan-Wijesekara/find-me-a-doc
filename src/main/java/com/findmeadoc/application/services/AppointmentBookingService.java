@@ -1,5 +1,6 @@
 package com.findmeadoc.application.services;
 
+import com.findmeadoc.application.dto.AppointmentNotificationResponse;
 import com.findmeadoc.application.dto.CreateAppointmentRequest;
 import com.findmeadoc.application.dto.CreateAppointmentResponse;
 import com.findmeadoc.application.ports.BookAppointmentUseCase;
@@ -11,6 +12,7 @@ import com.findmeadoc.domain.repositories.AppointmentRepository;
 import com.findmeadoc.domain.repositories.DoctorRepository;
 import com.findmeadoc.domain.repositories.PatientRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,7 @@ public class AppointmentBookingService implements BookAppointmentUseCase {
     private final AppointmentRepository appointmentRepository;
     private final PatientRepository patientRepository;
     private final DoctorRepository doctorRepository;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @Override
     @Transactional
@@ -63,6 +66,16 @@ public class AppointmentBookingService implements BookAppointmentUseCase {
         }
 
         Appointment savedAppointment = appointmentRepository.save(newAppointment);
+
+        AppointmentNotificationResponse notification = new AppointmentNotificationResponse(
+                savedAppointment.getId().toString(),
+                patient.getUser().getFullName(),
+                savedAppointment.getAppointmentDate(),
+                savedAppointment.getAppointmentTime(),
+                "You have a new appointment!"
+        );
+
+        messagingTemplate.convertAndSend("/topic/doctor/" + request.doctorId(), notification);
 
         String doctorName = doctor.getUser().getFullName();
 

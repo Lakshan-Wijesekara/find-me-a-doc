@@ -1,10 +1,7 @@
 package com.findmeadoc.controllers;
 
 import com.findmeadoc.application.dto.*;
-import com.findmeadoc.application.ports.BookAppointmentUseCase;
-import com.findmeadoc.application.ports.GetAvailableSlotsUseCase;
-import com.findmeadoc.application.ports.GetDoctorAppointmentsUseCase;
-import com.findmeadoc.application.ports.GetPatientAppointmentUseCase;
+import com.findmeadoc.application.ports.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/appointments")
@@ -23,17 +21,20 @@ public class AppointmentController {
     private final GetPatientAppointmentUseCase getPatientAppointmentUseCase;
     private final GetAvailableSlotsUseCase getAvailableSlotsUseCase;
     private final GetDoctorAppointmentsUseCase getDoctorAppointmentsUseCase;
+    private final CancelAppointmentUseCase cancelAppointmentUseCase;
 
     public AppointmentController(
             BookAppointmentUseCase bookAppointmentUseCase,
             GetPatientAppointmentUseCase getPatientAppointmentUseCase,
             GetAvailableSlotsUseCase getAvailableSlotsUseCase,
-            GetDoctorAppointmentsUseCase getDoctorAppointmentsUseCase
+            GetDoctorAppointmentsUseCase getDoctorAppointmentsUseCase,
+            CancelAppointmentUseCase cancelAppointmentUseCase
     ) {
         this.bookAppointmentUseCase = bookAppointmentUseCase;
         this.getPatientAppointmentUseCase = getPatientAppointmentUseCase;
         this.getAvailableSlotsUseCase = getAvailableSlotsUseCase;
         this.getDoctorAppointmentsUseCase = getDoctorAppointmentsUseCase;
+        this.cancelAppointmentUseCase = cancelAppointmentUseCase;
     }
 
     @PostMapping
@@ -86,6 +87,21 @@ public class AppointmentController {
 
         // Return a 200 OK with the list
         return ResponseEntity.ok(appointments);
+    }
+
+    @PatchMapping("/{appointmentId}/cancel")
+    public ResponseEntity<Map<String, String>> cancelAppointment(
+            @PathVariable Long appointmentId,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        // The Principal's name is typically the doctor email
+        String doctorEmail = userDetails.getUsername();
+
+        // Execute the business logic
+        cancelAppointmentUseCase.execute(appointmentId, doctorEmail);
+
+        // Return a friendly JSON response
+        return ResponseEntity.ok(Map.of("message", "Appointment successfully cancelled."));
     }
 
 }
