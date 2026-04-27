@@ -8,6 +8,7 @@ public record DoctorAppointmentDashboardResponse(
         String patientName,
         LocalDate appointmentDate,
         LocalTime appointmentTime,
-        String status
+        String status,
+        TriageResponse aiBrief
 ) {
 }
