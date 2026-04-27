@@ -47,6 +47,9 @@ public class SecurityConfig {
                         // Allow public access to the triage service
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/triage/**").permitAll()
 
+                        //Allow access to the notification service
+                        .requestMatchers("/ws/**").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -59,12 +62,17 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
+        // Allow the frontend Vite
         configuration.setAllowedOrigins(java.util.List.of("http://localhost:5173"));
-        configuration.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        // Adding the HTTP methods allowed
+        configuration.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        // Adding the headers allowed
         configuration.setAllowedHeaders(java.util.List.of("Authorization", "Content-Type", "Cache-Control"));
+        // Allow credentials (cookies, authorization headers, etc.)
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        // Applying the CORS policy to all API endpoints
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
