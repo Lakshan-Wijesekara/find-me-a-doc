@@ -2,6 +2,7 @@ package com.findmeadoc.application.services;
 
 import com.findmeadoc.application.dto.PatientNotificationResponse;
 import com.findmeadoc.application.ports.CancelAppointmentUseCase;
+import com.findmeadoc.application.ports.EmailNotificationUseCase;
 import com.findmeadoc.domain.exception.ResourceNotFoundException;
 import com.findmeadoc.domain.models.Appointment;
 import com.findmeadoc.domain.models.Doctor;
@@ -20,6 +21,7 @@ public class AppointmentCancellationService implements CancelAppointmentUseCase 
     private final AppointmentRepository appointmentRepository;
     private final DoctorRepository doctorRepository;
     private final SimpMessagingTemplate messagingTemplate;
+    private final EmailNotificationUseCase emailNotificationUseCase;
 
     @Override
     @Transactional
@@ -50,5 +52,16 @@ public class AppointmentCancellationService implements CancelAppointmentUseCase 
 
         String patientChannel = "/topic/patient/" + appointment.getPatient().getId();
         messagingTemplate.convertAndSend(patientChannel, notification);
+
+        String patientEmail = appointment.getPatient().getUser().getEmail();
+        String emailSubject = "Appointment Cancellation Notice";
+        String emailBody = String.format(
+                "Dear %s,\n\nThis is a notification that your upcoming appointment with Dr. %s on %s has been cancelled.\n\nPlease log into your dashboard to book a new time.\n\nRegards,\nFindMeADoc Administration",
+                appointment.getPatient().getUser().getFullName(),
+                doctor.getUser().getFullName(),
+                appointment.getAppointmentDate()
+        );
+
+        emailNotificationUseCase.sendEmail(patientEmail, emailSubject, emailBody);
     }
 }
