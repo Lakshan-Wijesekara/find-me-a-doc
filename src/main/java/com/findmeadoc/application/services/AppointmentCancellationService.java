@@ -9,6 +9,7 @@ import com.findmeadoc.domain.models.Doctor;
 import com.findmeadoc.domain.repositories.AppointmentRepository;
 import com.findmeadoc.domain.repositories.DoctorRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ public class AppointmentCancellationService implements CancelAppointmentUseCase 
 
     @Override
     @Transactional
+    @CacheEvict(value = "appointments", key = "#doctorEmail")
     public void execute(Long appointmentId, String doctorEmail) {
         // verify the doctor making the request
         Doctor doctor = doctorRepository.findByUserEmail(doctorEmail)

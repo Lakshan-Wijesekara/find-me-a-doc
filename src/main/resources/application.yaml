@@ -47,6 +47,14 @@ spring:
           num-thread: 8
           keep-alive: 10m
 
+  cache:
+    type: redis
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
 application:
   security:
     jwt:
