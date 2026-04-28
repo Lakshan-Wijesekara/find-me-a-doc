@@ -50,6 +50,10 @@ public class SecurityConfig {
                         //Allow access to the notification service
                         .requestMatchers("/ws/**").permitAll()
 
+                        // Allow access to app helper service
+                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/help/chat/**").permitAll()
+
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
