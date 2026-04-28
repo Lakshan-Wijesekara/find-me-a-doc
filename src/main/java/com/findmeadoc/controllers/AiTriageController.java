@@ -2,6 +2,7 @@ package com.findmeadoc.controllers;
 
 import com.findmeadoc.application.dto.TriageResponse;
 import com.findmeadoc.application.ports.AITriagePort;
+import com.findmeadoc.infrastructure.security.services.SecuritySanitizer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,9 +22,12 @@ public class AiTriageController {
         // Get chatId
         String chatId = triageRequest.chatId();
         //Get symptoms
-        String symptoms = triageRequest.symptoms();
+        String rawSymptoms = triageRequest.symptoms();
 
-        TriageResponse response = aiTriagePort.analyzeSymptoms(chatId, symptoms);
+        // Sanitize the data and mask PII
+        String safeSymptoms = SecuritySanitizer.cleanPatientInput(rawSymptoms);
+
+        TriageResponse response = aiTriagePort.analyzeSymptoms(chatId, safeSymptoms);
 
         return ResponseEntity.ok(response);
     }

@@ -41,8 +41,8 @@ spring:
       base-url: http://localhost:11434
       chat:
         options:
-          model: llama3:latest
-          num-predict: 1000
+          model: llama3.2:3b
+          num-predict: -1
           temperature: 0.2
           num-thread: 8
           keep-alive: 10m
