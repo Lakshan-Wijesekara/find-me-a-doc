@@ -8,6 +8,7 @@ import com.findmeadoc.domain.models.Role;
 import com.findmeadoc.domain.models.User;
 import com.findmeadoc.domain.repositories.DoctorRepository;
 import com.findmeadoc.domain.repositories.UserRepository;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +31,7 @@ public class DoctorRegistrationService implements DoctorRegistrationUseCase {
 
     @Override
     @Transactional // Used to avoid half created profiles.
+    @CacheEvict(value = "doctors", allEntries = true)
     public DoctorRegistrationResponse registerDoctor(DoctorRegistrationRequest request) {
 
         // Step 1: Create the base User entity

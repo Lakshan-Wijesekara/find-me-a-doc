@@ -1,5 +1,7 @@
 package com.findmeadoc.application.dto;
 
+import java.io.Serializable;
+
 public record DoctorProfileResponse(
         Long id,
         String name,
@@ -7,5 +9,5 @@ public record DoctorProfileResponse(
         Double consultationFee,
         String email,
         String phoneNumber
-) {
+) implements Serializable {
 }

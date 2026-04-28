@@ -4,6 +4,7 @@ import com.findmeadoc.application.dto.DoctorProfileResponse;
 import com.findmeadoc.application.ports.SearchDoctorUseCase;
 import com.findmeadoc.domain.models.Doctor;
 import com.findmeadoc.domain.repositories.DoctorRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class SearchDoctorService implements SearchDoctorUseCase {
     }
 
     @Override
+    @Cacheable(value = "doctors", key = "#specialty != null ? #specialty : 'all'")
     public List<DoctorProfileResponse> searchDoctors(String specialty) {
 
         List<Doctor> doctors;
