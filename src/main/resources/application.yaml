@@ -42,7 +42,7 @@ spring:
       chat:
         options:
           model: llama3:latest
-          num-predict: 2000
+          num-predict: 1000
           temperature: 0.2
           num-thread: 8
           keep-alive: 10m
