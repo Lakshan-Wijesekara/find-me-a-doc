@@ -67,6 +67,7 @@ public class OllamaAITriageAdapter implements AITriagePort {
                 - DO NOT use markdown formatting (no ```json).
                 - DO NOT add conversational text.
                 - THE DOCTOR BRIEF: When concluding, you ABSOLUTELY MUST write a MAXIMUM OF 20 WORDS in 'doctorBrief'. Keep it extremely concise.
+                - OUT OF SCOPE: If the user types nonsense or asks for non-medical advice, immediately use STATE 2 with "Low" urgency, "General Medicine" specialty, and state "Non-medical input" in the brief.
                 """;
 
         return chatClient.prompt()
