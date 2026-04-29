@@ -10,17 +10,20 @@ import com.findmeadoc.domain.repositories.PatientRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.Map;
+import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class) // Enabling mockito
-class BookingServiceTest {
+class AppointmentServiceTest {
 
     private Patient mockPatient;
     private Doctor mockDoctor;
@@ -36,6 +39,9 @@ class BookingServiceTest {
 
     @Mock
     private PatientRepository patientRepository;
+
+    @Mock
+    private SimpMessagingTemplate messagingTemplate;
 
 
     @InjectMocks // Real instance of Appointment booking service
@@ -121,6 +127,12 @@ class BookingServiceTest {
         // Verify the repo save method was called at least once
         org.mockito.Mockito.verify(appointmentRepository, org.mockito.Mockito.times(1))
                 .save(org.mockito.ArgumentMatchers.any(Appointment.class));
+
+        org.mockito.Mockito.verify(messagingTemplate, org.mockito.Mockito.times(1))
+                .convertAndSend(
+                        org.mockito.ArgumentMatchers.eq("/topic/doctor/" + mockRequest.doctorId()),
+                        Optional.ofNullable(ArgumentMatchers.any())
+                );
 
         org.junit.jupiter.api.Assertions.assertNotNull(response);
 
